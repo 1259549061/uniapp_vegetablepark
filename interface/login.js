@@ -1,14 +1,5 @@
-export default function() {
-	uniCloud.callFunction({
-		name: 'add',
-		data: {
-			name: 'DCloud',
-			subType: 'uniCloud',
-			createTime: Date.now()
-		}
-	}).then(()=>{
-		uni.showModal({
-			content:'success'
-		})
-	})
+export default async function(code) {
+	uni.
+	const { openid } = await uniAccountIns.code2Session(code)
+	console.log('openid',openid)
 }

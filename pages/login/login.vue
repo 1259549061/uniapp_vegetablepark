@@ -1,5 +1,5 @@
 <template>
-	<button @click="login">login</button>
+	<button open-type="getUserInfo" @click="login">login</button>
 </template>
 
 <script>
@@ -15,23 +15,24 @@ export default {
 			// },fail(err) {
 			// 	console.log(err)
 			// } });
-			
+			let that = this
 			uni.getProvider({service:"oauth", success:function(getProvider){
 				let provider = getProvider.provider;
 				uni.login({
 					provider,
 					success:function(e){
-						console.log(e.code)
-						uni.getUserInfo({
-							provider,
-							withCredentials: true,
-							success(info) {
-								console.log(info)
-							},
-							fail(e) {
-								console.log(e)
-							}
-						})
+						console.log(e)
+						that.$fetch.login(e.code)
+						// uni.getUserInfo({
+						// 	provider,
+						// 	withCredentials: true,
+						// 	success(info) {
+						// 		console.log(info)
+						// 	},
+						// 	fail(e) {
+						// 		console.log(e)
+						// 	}
+						// })
 					}
 				})
 			}})
