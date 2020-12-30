@@ -1,5 +1,9 @@
 <template>
-	<button open-type="getUserInfo" @click="login">login</button>
+	<view>
+		<button open-type="getUserInfo" @getuserinfo="getuserinfo">login</button>
+		<button @click="checnktoken">是否过期</button>
+	</view>
+	
 </template>
 
 <script>
@@ -8,6 +12,22 @@
 			return {};
 		},
 		methods: {
+			checnktoken(){
+				let token = uni.getStorageSync('uni_id_token');
+				uniCloud.callFunction({
+					name:'checkToken',
+					data: {
+						token
+					}
+				}).then(r=>{
+					console.log('rr',r)
+					if(r.result.code == 0 ){
+						console.log('token未过期')
+					}else{
+						console.log('token过期，请重新登陆')
+					}
+				})
+			},
 			getCode(provider) {
 				return new Promise((resolve, reject) => {
 					uni.login({
@@ -22,37 +42,29 @@
 					})
 				})
 			},
-			loginByWeixin(code) {
+			login(code,provider) {
 				uniCloud.callFunction({
-					name: 'login-by-weixin',
+					name: 'login',
 					data: {
+						provider,
 						code
 					}
 				}).then((res) => {
 					console.log('res',res)
-					uni.showModal({
-						showCancel: false,
-						content: JSON.stringify(res.result)
-					})
 					if (res.result.code === 0) {
 						uni.setStorageSync('uni_id_token', res.result.token)
 					}
 				}).catch((e) => {
 					console.log(e)
-					uni.showModal({
-						showCancel: false,
-						content: '微信登录失败，请稍后再试'
-					})
 				})
 			},
-			login() {
+			getuserinfo() {
 				uni.getProvider({
 					service: "oauth",
 					success: async (getProvider)=> {
 						let provider = getProvider.provider;
 						let code = await this.getCode(provider);
-						console.log(code)
-						this.loginByWeixin(code);
+						this.login(code,provider);
 					}
 				})
 			}
