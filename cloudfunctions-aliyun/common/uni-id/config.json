@@ -1,6 +1,6 @@
 {
-    "passwordSecret": "passwordvegetablepark", 
-    "tokenSecret": "passwordtoken",
+    "passwordSecret": "vegetablepark", 
+    "tokenSecret": "vegetablepark",
     "tokenExpiresIn": 7200,
     "tokenExpiresThreshold": 600, 
     "bindTokenToDevice": true,

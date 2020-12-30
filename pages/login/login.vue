@@ -3,7 +3,7 @@
 		<button open-type="getUserInfo" @getuserinfo="getuserinfo">login</button>
 		<button @click="checnktoken">是否过期</button>
 	</view>
-	
+
 </template>
 
 <script>
@@ -12,27 +12,15 @@
 			return {};
 		},
 		methods: {
-			checnktoken(){
-				let uid = uni.getStorageSync('uid');
-				uniCloud.callFunction({
-					name:'checkToken',
-					data: {
-						uid
-					}
-				}).then(r=>{
-					if(r.result) {
-						console.log('未过期')
-					}else {
-						console.log('过期')
-					}
-				})
+			checnktoken() {
+
 			},
 			getCode(provider) {
 				return new Promise((resolve, reject) => {
 					uni.login({
 						provider,
 						success(res) {
-							console.log(res)
+							console.log(res);
 							resolve(res.code)
 						},
 						fail(err) {
@@ -41,30 +29,32 @@
 					})
 				})
 			},
-			login(code,provider) {
+			async login(code, provider) {
+				console.log(code, provider);
 				uniCloud.callFunction({
-					name: 'login',
+					name: "myRouter",
 					data: {
-						provider,
-						code
+						action: "login/login",
+						data: {
+							provider,
+							code
+						}
 					}
-				}).then((res) => {
-					console.log('res',res)
+				}).then(res => {
+					console.log('login', res)
 					if (res.result.code === 0) {
 						uni.setStorageSync('uni_id_token', res.result.token)
 						uni.setStorageSync('uid', res.result.uid)
 					}
-				}).catch((e) => {
-					console.log(e)
 				})
 			},
 			getuserinfo() {
 				uni.getProvider({
 					service: "oauth",
-					success: async (getProvider)=> {
-						let provider = getProvider.provider;
+					success: async (getProvider) => {
+						let provider = getProvider.provider[0];
 						let code = await this.getCode(provider);
-						this.login(code,provider);
+						this.login(code, provider);
 					}
 				})
 			}
