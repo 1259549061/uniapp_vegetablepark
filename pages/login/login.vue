@@ -13,18 +13,17 @@
 		},
 		methods: {
 			checnktoken(){
-				let token = uni.getStorageSync('uni_id_token');
+				let uid = uni.getStorageSync('uid');
 				uniCloud.callFunction({
 					name:'checkToken',
 					data: {
-						token
+						uid
 					}
 				}).then(r=>{
-					console.log('rr',r)
-					if(r.result.code == 0 ){
-						console.log('token未过期')
-					}else{
-						console.log('token过期，请重新登陆')
+					if(r.result) {
+						console.log('未过期')
+					}else {
+						console.log('过期')
 					}
 				})
 			},
@@ -53,6 +52,7 @@
 					console.log('res',res)
 					if (res.result.code === 0) {
 						uni.setStorageSync('uni_id_token', res.result.token)
+						uni.setStorageSync('uid', res.result.uid)
 					}
 				}).catch((e) => {
 					console.log(e)
