@@ -24,5 +24,10 @@ module.exports = class LoginService extends(
 				}
 			};
 		}
+	},
+	async checkToken() {
+		let r = await uniID.checkToken(this.ctx.event.token)
+		return r.code ? {result:false, msg: "过期"} : {result:true, msg: "未过期"}
 	}
+	
 };

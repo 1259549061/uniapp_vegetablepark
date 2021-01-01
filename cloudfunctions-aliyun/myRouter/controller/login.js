@@ -3,6 +3,9 @@ module.exports = class LoginController extends (
   Controller
 ) {
   login() {
-    return this.service.login.login();
+	  return this.service.login.login();
+  },
+  checkToken() {
+	  return this.service.login.checkToken();
   }
 };
