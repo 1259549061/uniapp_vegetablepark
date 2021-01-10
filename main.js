@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App'
-
+import store from './store'
+Vue.prototype.$store = store
 Vue.config.productionTip = false
 
 App.mpType = 'app'
@@ -8,7 +9,7 @@ App.mpType = 'app'
 Vue.prototype.request = (url,params)=>{
 	return new Promise((resolve,reject)=>{
 		uniCloud.callFunction({
-			name:"myRouter",
+			name:"api",
 			data:{
 				action: url,
 				data: params
@@ -24,6 +25,7 @@ Vue.prototype.request = (url,params)=>{
 }
 
 const app = new Vue({
-	...App
+	...App,
+	store
 })
 app.$mount()
