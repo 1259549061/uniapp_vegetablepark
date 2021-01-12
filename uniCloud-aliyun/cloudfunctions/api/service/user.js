@@ -8,7 +8,7 @@ module.exports = class UserService extends(
 	Service
 ) {
 
-	async get_visit_account() {
+	async set_visit_account() {
 		const collection = db.collection('user_visit_account');
 		let time = new Date(this.ctx.data.time);
 		let formatTime = time.getFullYear() + '-' + ((time.getMonth() + 1) < 10 ? '0' + (time.getMonth() + 1) : (time.getMonth() +
@@ -30,7 +30,7 @@ module.exports = class UserService extends(
 				}
 			})
 			if(find) {
-				return await collection.where({
+				collection.where({
 					user_id
 				}).update({
 					visit_time: data.data[0].visit_time
@@ -41,9 +41,9 @@ module.exports = class UserService extends(
 					date: formatTime,
 					total_count: 1,
 					total_time: 0,
-					more: this.ctx.data.time
+					more: '' + this.ctx.data.time
 				})
-				return await collection.where({
+				collection.where({
 					user_id
 				}).update({
 					visit_time: arr
@@ -51,7 +51,7 @@ module.exports = class UserService extends(
 			}
 			
 		} else {
-			return await collection.add({
+			collection.add({
 				user_id,
 				visit_time: [{
 					date: formatTime,
@@ -61,6 +61,10 @@ module.exports = class UserService extends(
 				}]
 			})
 		}
+	}
+	async get_visit_account() {
+		const collection = db.collection('user_visit_account');
+		return await collection.get()
 	}
 	async setInfo() {
 		const collection = db.collection("uni-id-users")
