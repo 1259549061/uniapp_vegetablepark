@@ -9,7 +9,7 @@ module.exports = class UserService extends(
 ) {
 	async visit_account() {
 		try {
-			const collection = db.action("result").collection('user_visit_account');
+			const collection = db.collection('user_visit_account');
 			return await collection.get()
 		}catch (e){
 			console.log(e)
